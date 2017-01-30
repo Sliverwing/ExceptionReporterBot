@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Cache;
 use Telegram\Bot\Objects\Update;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 
 class TelegramReceiveMessageHandler implements ShouldQueue
@@ -25,6 +26,7 @@ class TelegramReceiveMessageHandler implements ShouldQueue
      */
     public function __construct(Update $update)
     {
+        Telegram::commandsHandler(false);
         $this->message = $update['message'];
         $this->update_id = $update['update_id'];
     }
