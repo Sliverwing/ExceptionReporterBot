@@ -23,15 +23,22 @@ class NewAppCommand extends Command
      */
     public function handle($arguments)
     {
-        $this->replyWithChatAction(['action' => Actions::TYPING]);
+        // $this->replyWithChatAction(['action' => Actions::TYPING]);
+        $user_id = $this->update->getMessage()->getFrom()->getId();
+
+        $can_generate_token = AppModel::where('to_id', $user_id)->count() < 5 ? true : false;
         $is_dublicated = true;
 
-        while($is_dublicated) {
-            $token = str_random(50);            
+        if (!$can_generate_token) {
+            $response = 'Sorry, Your app count should less than 6, please delete some useless app';
+        }
+
+        while($can_generate_token && $is_dublicated) {
+            $token = str_random(50);
             $is_dublicated = AppModel::where('token', 'like', '%' . $token)->count() === 0 ? false : true;
             if (!$is_dublicated) {
                 $app = AppModel::create([
-                    'to_id' => $this->update->getMessage()->getFrom()->getId(),
+                    'to_id' => $user_id,
                     'token' => $token,
                 ]);
                 $response = 'Your Token is ' . $app->id . ':' .$token;
