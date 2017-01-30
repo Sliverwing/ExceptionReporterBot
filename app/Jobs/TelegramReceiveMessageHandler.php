@@ -36,7 +36,7 @@ class TelegramReceiveMessageHandler implements ShouldQueue
      */
     public function handle()
     {
-        var_dump($this->message);
+        Cache::forever('latest_update_id', $this->update_id);
         var_dump($this->update_id);
     }
 }
