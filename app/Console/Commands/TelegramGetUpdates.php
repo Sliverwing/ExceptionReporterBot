@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Foundation\Bus\DispatchesJobs;
-use App\Jobs\TelegramReceiveMessageHandler;
+use App\Bot\Jobs\TelegramReceiveMessageHandler;
 
 class TelegramGetUpdates extends Command
 {
