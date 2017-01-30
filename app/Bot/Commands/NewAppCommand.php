@@ -4,6 +4,7 @@ namespace App\Bot\Commands;
 
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
+use App\Models\App as AppModel;
 
 class NewAppCommand extends Command
 {
@@ -22,15 +23,22 @@ class NewAppCommand extends Command
      */
     public function handle($arguments)
     {
-        $this->replyWithMessage(['text' => 'Ok, We will generate an token for your app:']);
-
-        // This will update the chat status to typing...
         $this->replyWithChatAction(['action' => Actions::TYPING]);
+        $is_dublicated = true;
 
-        // Build the list
-        $response = "Right Place!";
+        while($is_dublicated) {
+            $token = str_random(50);            
+            $is_dublicated = AppModel::where('token', 'like', '%' . $token)->count() === 0 ? false : true;
+            if (!$is_dublicated) {
+                $app = AppModel::create([
+                    'to_id' => $this->update->getMessage()->getFrom()->getId(),
+                    'token' => $token,
+                ]);
+                $response = 'Your Token is ' . $app->id . ':' .$token;
+                break;
+            }
+        }
 
-        // Reply with the commands list
         $this->replyWithMessage(['text' => $response]);
     }
 }
