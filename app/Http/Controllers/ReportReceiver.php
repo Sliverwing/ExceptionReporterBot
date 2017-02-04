@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\App as AppModel;
+use Illuminate\Support\Facades\Log;
 
 class ReportReceiver extends Controller
 {
-    public function handler($token)
+    public function handler($token, Request $request)
     {
-        $app = AppModel::where('token', $token)->first();
+        $_idToken = explode(':', $token);
+        $app = AppModel::where('token', $_idToken[1])->where('id', $_idToken[0])->first();
         if ($app === null) {
             abort(401);
         } else {
