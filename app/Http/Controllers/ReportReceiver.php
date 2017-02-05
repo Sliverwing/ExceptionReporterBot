@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\App as AppModel;
+use App\Models\Exception as ExceptionModel;
 use Illuminate\Support\Facades\Log;
 
 class ReportReceiver extends Controller
@@ -15,7 +16,13 @@ class ReportReceiver extends Controller
         if ($app === null) {
             abort(401);
         } else {
-            
+            ExceptionModel::create([
+                'app_id' => $app->id,
+                'file' => $request->input('file'),
+                'code' => $request->input('code'),
+                'message' => $request->input('message'),
+                'trace' => $request->input('trace'),
+            ]);
         }
     }
 }
