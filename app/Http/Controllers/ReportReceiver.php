@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Bot\Jobs\TelegramSendExceptionAlert;
 use Illuminate\Http\Request;
 use App\Models\App as AppModel;
 use App\Models\Exception as ExceptionModel;
@@ -16,6 +17,7 @@ class ReportReceiver extends Controller
         if ($app === null) {
             abort(401);
         } else {
+            $this->dispatch(new TelegramSendExceptionAlert($app->to_id, $request->input('message')));
             ExceptionModel::create([
                 'app_id' => $app->id,
                 'file' => $request->input('file'),
