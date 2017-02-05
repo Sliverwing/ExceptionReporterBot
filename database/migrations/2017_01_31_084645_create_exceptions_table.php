@@ -15,6 +15,11 @@ class CreateExceptionsTable extends Migration
     {
         Schema::create('exceptions', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('app_id')->unsigned()->index();
+            $table->string('file')->nullable();
+            $table->string('code')->nullable();
+            $table->string('message')->nullable();
+            $table->text('trace');
             $table->timestamps();
         });
     }
